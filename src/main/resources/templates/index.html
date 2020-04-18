@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.thymleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+	<link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+	
+	<title>Thymleaf practice</title>
+</head>
+<body>
+	
+	<div class="container">
+		<br/>
+		<button class="btn btn-info newBtn">Create Country</button>
+		<hr/>
+	
+		<div class="card">
+			<div class="card-block">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Country</th>
+							<th>Capital</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					
+					<tbody >
+						<tr th:each = "country: ${countryList.content}">
+							<td th:text = "${country.name}"></td>
+							<td th:text = "${country.capital}"></td>
+							<td>
+								<a th:href="@{get_country/(id=${country.id})}" class="btn btn-primary editBtn">Edit</a>
+								<a th:href="@{delete/(id=${country.id})}" class="btn btn-danger deleteBtn">Delete</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<ul class="pagination justify-content-center">
+				    <li th:each = "i : ${#numbers.sequence(1, countryList.totalPages)}"
+				    	 th:classappend = "${currentPage} == ${i} ? 'active' : ''" class="page-item">
+				    	<a th:href = "@{/(page=${i})}" th:text = "${i}" class="page-link"></a>	
+				    </li>
+				  </ul>
+			</div>			
+		</div>
+		
+		<div class="myForm">
+			<form th:action="@{/save}" method="post">
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Create or Update</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				          <div class="form-group">
+				            <label for="name" class="col-form-label">Name:</label>
+				            <input type="text" class="form-control" id="name" name="name" value="" required placeholder="Enter country name"/>
+				          </div>
+				          <div class="form-group">
+				            <label for="capital" class="col-form-label" required>Capital:</label>
+				            <input type="text" class="form-control" id="capital" name="capital" value="" required placeholder="Enter capital name"/>
+				          </div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				        <input id="saveBtn" type="submit" class="btn btn-success" value="Save/Update" />
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</form>
+		</div>
+		
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <p class="alert alert-warning"> Are you sure to delete this? </p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		        <a id="deleteRef" href="" class="btn btn-danger">Delete</a>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	</div>	
+	
+	
+	<script>
+		boostrapValidate('#name', '')
+	</script>
+</body>
+</html>
